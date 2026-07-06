@@ -1,0 +1,23 @@
+Honeywell AeroDocs — Hydraulic Pump Maintenance Manual (Test Fixture)
+
+Document ID: TEST-MANUAL-001
+Part Number: PN-HYD-4521-A
+Alternate P/N: HYD-4521
+
+Overview
+This manual covers inspection and replacement of the hydraulic pump assembly
+used in auxiliary power unit (APU) systems.
+
+Procedure
+1. Depressurize the hydraulic system before removing the pump.
+2. Inspect the pump housing for cracks or fluid leaks.
+3. Replace the seal kit if wear exceeds 0.5 mm.
+
+Barcode Reference: 1234567890128
+
+Troubleshooting
+- Low pressure: check inlet filter and P/N HYD-4521 seal ring.
+- Overheating: verify cooler flow rate per Honeywell spec 14 CFR Part 43.
+
+Comments
+Technician note: Always torque mounting bolts to 45 Nm.
