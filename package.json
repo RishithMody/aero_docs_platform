@@ -1,0 +1,19 @@
+{
+  "name": "aerodocs-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=web",
+    "build:web": "npm run build --workspace=web",
+    "dev:api": "cd backend && uvicorn app.main:app --reload --port 8080",
+    "dev:ollama": "docker compose up -d ollama && npm run models:pull",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down",
+    "models:pull": "bash docker/pull-models.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

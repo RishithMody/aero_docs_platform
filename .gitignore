@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.next/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+uploads/
+
+# ML artifacts
+*.pt
+runs/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Docker
+*.log
+
+# Secrets
+.env.local
+.env.production
