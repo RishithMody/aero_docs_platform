@@ -1,0 +1,88 @@
+services:
+  chroma:
+    image: chromadb/chroma:0.5.23
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    networks:
+      - aerodocs-vpc
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - aerodocs-vpc
+
+  ollama-init:
+    image: curlimages/curl:8.11.1
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./docker/pull-models.sh:/pull-models.sh:ro
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["/bin/sh", "/pull-models.sh"]
+    networks:
+      - aerodocs-vpc
+
+  api:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - LLM_MODEL=llama3.2
+      - LLAVA_MODEL=llava
+      - EMBEDDING_MODEL=nomic-embed-text
+      - OLLAMA_AUTO_PULL=true
+      - OLLAMA_STARTUP_TIMEOUT=300
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
+      - CORS_ORIGINS=http://localhost:3000
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      chroma:
+        condition: service_started
+      ollama-init:
+        condition: service_completed_successfully
+    networks:
+      - aerodocs-vpc
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8080
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    depends_on:
+      - api
+    networks:
+      - aerodocs-vpc
+
+volumes:
+  chroma_data:
+  ollama_data:
+  uploads_data:
+
+networks:
+  aerodocs-vpc:
+    driver: bridge
