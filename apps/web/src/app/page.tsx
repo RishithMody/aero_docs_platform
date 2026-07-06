@@ -1,8 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Barcode,
+  Brain,
+  Camera,
+  FileUp,
+  Hash,
+  Search,
+} from "lucide-react";
+import RetroGrid from "@/components/ui/retro-grid";
 import { OllamaStatusPanel } from "@/components/OllamaStatusPanel";
-import { ResultCard } from "@/components/ResultCard";
+import { ResultCard, TabButton } from "@/components/ResultCard";
 import {
   askQuestion,
   searchByBarcode,
@@ -12,8 +21,18 @@ import {
   uploadDocument,
   type SearchResult,
 } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 type Tab = "semantic" | "part" | "barcode" | "image" | "ask" | "upload";
+
+const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+  { id: "semantic", label: "Semantic Search", icon: <Search className="h-4 w-4" /> },
+  { id: "part", label: "Part Number", icon: <Hash className="h-4 w-4" /> },
+  { id: "barcode", label: "Barcode", icon: <Barcode className="h-4 w-4" /> },
+  { id: "image", label: "Image Recognition", icon: <Camera className="h-4 w-4" /> },
+  { id: "ask", label: "Ask LLaMA 3.2", icon: <Brain className="h-4 w-4" /> },
+  { id: "upload", label: "Upload Document", icon: <FileUp className="h-4 w-4" /> },
+];
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>("semantic");
@@ -23,7 +42,7 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [answer, setAnswer] = useState("");
-  const [analysis, setAnalysis] = useState<string>("");
+  const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -64,22 +83,16 @@ export default function Home() {
     }
   }
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: "semantic", label: "Semantic Search" },
-    { id: "part", label: "Part Number" },
-    { id: "barcode", label: "Barcode" },
-    { id: "image", label: "Image Recognition" },
-    { id: "ask", label: "Ask LLaMA 3.2" },
-    { id: "upload", label: "Upload Document" },
-  ];
-
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto max-w-6xl px-6 py-10">
+    <main className="relative min-h-screen overflow-hidden">
+      <RetroGrid />
+      <div className="relative z-10 mx-auto max-w-6xl px-6 py-10">
         <header className="mb-10">
-          <p className="text-sm uppercase tracking-[0.2em] text-blue-300">Honeywell VPC</p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">AeroDocs Knowledge Base</h1>
-          <p className="mt-3 max-w-3xl text-slate-300">
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Honeywell VPC</p>
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground">
+            AeroDocs Knowledge Base
+          </h1>
+          <p className="mt-3 max-w-3xl text-muted-foreground">
             Secure RAG pipeline for aviation repair workflows. Search by text, part number,
             barcode, or image using LLaVA and YOLOv8, powered by Ollama LLaMA 3.2.
           </p>
@@ -89,43 +102,36 @@ export default function Home() {
 
         <div className="mb-6 flex flex-wrap gap-2">
           {tabs.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setTab(item.id)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                tab === item.id
-                  ? "bg-blue-500 text-white"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-              }`}
-            >
+            <TabButton key={item.id} active={tab === item.id} onClick={() => setTab(item.id)}>
+              {item.icon}
               {item.label}
-            </button>
+            </TabButton>
           ))}
         </div>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          {(tab === "upload") && (
+        <section className="rounded-2xl border border-border bg-card/70 p-6 backdrop-blur-md">
+          {tab === "upload" && (
             <div className="mb-4 grid gap-3 md:grid-cols-2">
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Document title"
-                className="rounded-lg border border-slate-700 bg-slate-950 px-4 py-3"
+                className="rounded-lg border border-input bg-background/60 px-4 py-3 text-foreground placeholder:text-muted-foreground"
               />
               <input
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
                 placeholder="Technician comments"
-                className="rounded-lg border border-slate-700 bg-slate-950 px-4 py-3"
+                className="rounded-lg border border-input bg-background/60 px-4 py-3 text-foreground placeholder:text-muted-foreground"
               />
             </div>
           )}
 
-          {(tab === "image" || tab === "upload") ? (
+          {tab === "image" || tab === "upload" ? (
             <input
               type="file"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="mb-4 block w-full text-sm text-slate-300 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-500 file:px-4 file:py-2 file:text-white"
+              className="mb-4 block w-full text-sm text-muted-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-primary-foreground"
             />
           ) : (
             <textarea
@@ -140,29 +146,32 @@ export default function Home() {
                       ? "Ask a maintenance question..."
                       : "Search technical documents..."
               }
-              className="mb-4 min-h-28 w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3"
+              className="mb-4 min-h-28 w-full rounded-lg border border-input bg-background/60 px-4 py-3 text-foreground placeholder:text-muted-foreground"
             />
           )}
 
           <button
             onClick={runSearch}
             disabled={loading}
-            className="rounded-lg bg-blue-500 px-5 py-3 font-medium text-white hover:bg-blue-400 disabled:opacity-60"
+            className={cn(
+              "rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground",
+              "hover:opacity-90 disabled:opacity-60",
+            )}
           >
             {loading ? "Processing..." : tab === "upload" ? "Upload" : "Search"}
           </button>
 
-          {message && <p className="mt-4 text-sm text-emerald-300">{message}</p>}
+          {message && <p className="mt-4 text-sm text-emerald-400">{message}</p>}
           {analysis && (
-            <div className="mt-4 rounded-lg bg-slate-950 p-4 text-sm text-slate-300">
-              <p className="mb-2 font-semibold text-white">LLaVA Analysis</p>
-              <p>{analysis}</p>
+            <div className="mt-4 rounded-lg border border-border bg-background/50 p-4 text-sm">
+              <p className="mb-2 font-semibold text-foreground">LLaVA Analysis</p>
+              <p className="text-muted-foreground">{analysis}</p>
             </div>
           )}
           {answer && (
-            <div className="mt-4 rounded-lg bg-slate-950 p-4 text-sm text-slate-200">
-              <p className="mb-2 font-semibold text-white">LLaMA 3.2 Answer</p>
-              <p className="whitespace-pre-wrap">{answer}</p>
+            <div className="mt-4 rounded-lg border border-border bg-background/50 p-4 text-sm">
+              <p className="mb-2 font-semibold text-foreground">LLaMA 3.2 Answer</p>
+              <p className="whitespace-pre-wrap text-muted-foreground">{answer}</p>
             </div>
           )}
         </section>

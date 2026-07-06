@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { RefreshCw } from "lucide-react";
 import { ensureOllamaModels, getOllamaStatus, type OllamaStatus } from "@/lib/ollama";
+import { cn } from "@/lib/utils";
 
 export function OllamaStatusPanel() {
   const [status, setStatus] = useState<OllamaStatus | null>(null);
@@ -48,13 +50,13 @@ export function OllamaStatusPanel() {
       : "bg-red-400";
 
   return (
-    <section className="mb-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
+    <section className="mb-8 rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-md">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className={`h-3 w-3 rounded-full ${dotColor}`} />
+          <span className={cn("h-3 w-3 rounded-full", dotColor)} />
           <div>
-            <h2 className="font-semibold text-white">Ollama</h2>
-            <p className="text-sm text-slate-400">
+            <h2 className="font-semibold text-foreground">Ollama</h2>
+            <p className="text-sm text-muted-foreground">
               {loading
                 ? "Checking connection..."
                 : status?.reachable
@@ -66,8 +68,9 @@ export function OllamaStatusPanel() {
         <button
           onClick={handlePull}
           disabled={pulling || loading}
-          className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 py-2 text-sm text-foreground hover:bg-accent disabled:opacity-50"
         >
+          <RefreshCw className={cn("h-4 w-4", pulling && "animate-spin")} />
           {pulling ? "Pulling models..." : "Pull / refresh models"}
         </button>
       </div>
@@ -79,11 +82,11 @@ export function OllamaStatusPanel() {
             return (
               <div
                 key={role}
-                className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3"
+                className="rounded-lg border border-border bg-background/40 px-4 py-3"
               >
-                <p className="text-xs uppercase tracking-wide text-slate-500">{role}</p>
-                <p className="mt-1 font-medium text-slate-200">{model}</p>
-                <p className={`mt-1 text-xs ${ready ? "text-emerald-400" : "text-amber-400"}`}>
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">{role}</p>
+                <p className="mt-1 font-medium text-foreground">{model}</p>
+                <p className={cn("mt-1 text-xs", ready ? "text-emerald-400" : "text-amber-400")}>
                   {ready ? "Ready" : "Missing — click Pull models"}
                 </p>
               </div>
@@ -92,7 +95,7 @@ export function OllamaStatusPanel() {
         </div>
       )}
 
-      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
     </section>
   );
 }
