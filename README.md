@@ -109,6 +109,12 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Deployment
+
+For production deployment options and step-by-step guides, see **[DEPLOYMENT.md](./DEPLOYMENT.md)**.
+
+Covers VPS + Docker Compose, Vercel + GPU server, Railway/Render, AWS VPC, GCP, and on-prem/air-gapped setups.
+
 ## npm Scripts
 
 | Script | Description |
