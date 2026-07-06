@@ -26,3 +26,10 @@ runs/
 # Secrets
 .env.local
 .env.production
+
+# Test artifacts
+playwright-report/
+test-results/
+pytest_cache/
+htmlcov/
+.coverage

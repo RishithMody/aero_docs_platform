@@ -89,7 +89,7 @@ export default function Home() {
       <div className="relative z-10 mx-auto max-w-6xl px-6 py-10">
         <header className="mb-10">
           <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Honeywell VPC</p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground">
+          <h1 data-testid="app-title" className="mt-2 text-4xl font-bold tracking-tight text-foreground">
             AeroDocs Knowledge Base
           </h1>
           <p className="mt-3 max-w-3xl text-muted-foreground">
@@ -102,7 +102,12 @@ export default function Home() {
 
         <div className="mb-6 flex flex-wrap gap-2">
           {tabs.map((item) => (
-            <TabButton key={item.id} active={tab === item.id} onClick={() => setTab(item.id)}>
+            <TabButton
+              key={item.id}
+              active={tab === item.id}
+              onClick={() => setTab(item.id)}
+              data-testid={`tab-${item.id}`}
+            >
               {item.icon}
               {item.label}
             </TabButton>
@@ -113,12 +118,14 @@ export default function Home() {
           {tab === "upload" && (
             <div className="mb-4 grid gap-3 md:grid-cols-2">
               <input
+                data-testid="upload-title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Document title"
                 className="rounded-lg border border-input bg-background/60 px-4 py-3 text-foreground placeholder:text-muted-foreground"
               />
               <input
+                data-testid="upload-comments"
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
                 placeholder="Technician comments"
@@ -129,12 +136,14 @@ export default function Home() {
 
           {tab === "image" || tab === "upload" ? (
             <input
+              data-testid="file-input"
               type="file"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               className="mb-4 block w-full text-sm text-muted-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-primary-foreground"
             />
           ) : (
             <textarea
+              data-testid="query-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={
@@ -151,6 +160,7 @@ export default function Home() {
           )}
 
           <button
+            data-testid="submit-button"
             onClick={runSearch}
             disabled={loading}
             className={cn(
@@ -161,15 +171,19 @@ export default function Home() {
             {loading ? "Processing..." : tab === "upload" ? "Upload" : "Search"}
           </button>
 
-          {message && <p className="mt-4 text-sm text-emerald-400">{message}</p>}
+          {message && (
+            <p data-testid="status-message" className="mt-4 text-sm text-emerald-400">
+              {message}
+            </p>
+          )}
           {analysis && (
-            <div className="mt-4 rounded-lg border border-border bg-background/50 p-4 text-sm">
+            <div data-testid="llava-analysis" className="mt-4 rounded-lg border border-border bg-background/50 p-4 text-sm">
               <p className="mb-2 font-semibold text-foreground">LLaVA Analysis</p>
               <p className="text-muted-foreground">{analysis}</p>
             </div>
           )}
           {answer && (
-            <div className="mt-4 rounded-lg border border-border bg-background/50 p-4 text-sm">
+            <div data-testid="llama-answer" className="mt-4 rounded-lg border border-border bg-background/50 p-4 text-sm">
               <p className="mb-2 font-semibold text-foreground">LLaMA 3.2 Answer</p>
               <p className="whitespace-pre-wrap text-muted-foreground">{answer}</p>
             </div>
@@ -177,7 +191,7 @@ export default function Home() {
         </section>
 
         {results.length > 0 && (
-          <section className="mt-8 grid gap-4">
+          <section data-testid="search-results" className="mt-8 grid gap-4">
             {results.map((result, index) => (
               <ResultCard key={`${result.metadata.document_id}-${index}`} result={result} />
             ))}

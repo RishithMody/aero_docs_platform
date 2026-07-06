@@ -113,6 +113,17 @@ Open [http://localhost:3001](http://localhost:3001).
 
 For production deployment options and step-by-step guides, see **[DEPLOYMENT.md](./DEPLOYMENT.md)**.
 
+## Testing
+
+- **[MANUAL_TESTING.md](./MANUAL_TESTING.md)** — step-by-step manual QA checklist
+- **[tests/README.md](./tests/README.md)** — automated Playwright E2E and pytest suites
+
+```bash
+npm run test:unit          # Backend unit tests (no stack required)
+npm run test:integration   # API integration (stack required)
+npm run test:e2e           # Playwright UI + API E2E (stack required)
+```
+
 Covers VPS + Docker Compose, Vercel + GPU server, Railway/Render, AWS VPC, GCP, and on-prem/air-gapped setups.
 
 ## npm Scripts
@@ -125,6 +136,9 @@ Covers VPS + Docker Compose, Vercel + GPU server, Railway/Render, AWS VPC, GCP, 
 | `npm run models:pull` | Pull llama3.2, llava, nomic-embed-text |
 | `npm run docker:up` | Build and start full Docker stack |
 | `npm run docker:down` | Stop all containers |
+| `npm run test:unit` | Backend unit tests |
+| `npm run test:integration` | API integration tests |
+| `npm run test:e2e` | Playwright E2E tests |
 
 ## Ollama Integration
 

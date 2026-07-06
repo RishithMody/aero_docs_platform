@@ -7,7 +7,7 @@ export function ResultCard({ result }: { result: SearchResult }) {
   const barcodes = String(result.metadata.barcodes ?? "");
 
   return (
-    <article className="rounded-xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm">
+    <article className="rounded-xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm" data-testid="result-card">
       <div className="mb-2 flex items-center justify-between gap-3">
         <h3 className="font-semibold text-card-foreground">{title}</h3>
         <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
@@ -49,13 +49,16 @@ export function TabButton({
   active,
   onClick,
   children,
+  "data-testid": dataTestId,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  "data-testid"?: string;
 }) {
   return (
     <button
+      data-testid={dataTestId}
       onClick={onClick}
       className={cn(
         "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition",

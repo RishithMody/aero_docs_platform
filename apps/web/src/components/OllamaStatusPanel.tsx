@@ -50,7 +50,7 @@ export function OllamaStatusPanel() {
       : "bg-red-400";
 
   return (
-    <section className="mb-8 rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-md">
+    <section data-testid="ollama-panel" className="mb-8 rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-md">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span className={cn("h-3 w-3 rounded-full", dotColor)} />

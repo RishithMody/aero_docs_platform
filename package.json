@@ -11,7 +11,14 @@
     "dev:ollama": "docker compose up -d ollama && npm run models:pull",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down",
-    "models:pull": "bash docker/pull-models.sh"
+    "models:pull": "bash docker/pull-models.sh",
+    "test:unit": "cd backend && python -m pytest -m 'not integration'",
+    "test:integration": "cd backend && python -m pytest -m integration",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
   },
   "engines": {
     "node": ">=20"
