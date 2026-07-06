@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     chroma_collection: str = "aerodocs"
     upload_dir: str = "./uploads"
     api_secret: str = "dev-secret-change-in-production"
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "http://localhost:3001"
 
     class Config:
         env_file = ".env"

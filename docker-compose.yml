@@ -43,7 +43,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "8080:8080"
+      - "8081:8080"
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - LLM_MODEL=llama3.2
@@ -53,7 +53,7 @@ services:
       - OLLAMA_STARTUP_TIMEOUT=300
       - CHROMA_HOST=chroma
       - CHROMA_PORT=8000
-      - CORS_ORIGINS=http://localhost:3000
+      - CORS_ORIGINS=http://localhost:3001
     volumes:
       - uploads_data:/app/uploads
     depends_on:
@@ -68,11 +68,11 @@ services:
     build:
       context: ./apps/web
       args:
-        - NEXT_PUBLIC_API_URL=http://localhost:8080
+        - NEXT_PUBLIC_API_URL=http://localhost:8081
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - NEXT_PUBLIC_API_URL=http://localhost:8081
     depends_on:
       - api
     networks:

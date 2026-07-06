@@ -77,7 +77,7 @@ docker compose up --build
 
 This starts ChromaDB, Ollama (with model bootstrap), the FastAPI backend, and the Next.js frontend.
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3001](http://localhost:3001).
 
 ### Option B — Local development
 
@@ -107,7 +107,7 @@ cp .env.local.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3001](http://localhost:3001).
 
 ## Deployment
 
@@ -174,13 +174,13 @@ API docs (when running locally): [http://localhost:8080/docs](http://localhost:8
 | `OLLAMA_AUTO_PULL` | `true` | Pull missing models on startup |
 | `CHROMA_HOST` | `localhost` | ChromaDB host |
 | `CHROMA_PORT` | `8000` | ChromaDB port |
-| `CORS_ORIGINS` | `http://localhost:3000` | Allowed frontend origins |
+| `CORS_ORIGINS` | `http://localhost:3001` | Allowed frontend origins |
 
 ### Frontend (`apps/web/.env.local`)
 
 | Variable | Default | Description |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | `http://localhost:8080` | Backend API base URL |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:8081` | Backend API base URL |
 
 ## VPC / Security Notes
 
